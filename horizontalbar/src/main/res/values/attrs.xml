@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HorizontalBar">
+        <attr name="bar_height" format="dimension"/>
+        <attr name="bottom_color" format="color"/>
+        <attr name="value_bar_color" format="color"/>
+        <attr name="current_value" format="integer"/>
+        <attr name="max_value" format="integer"/>
+        <attr name="value_text_color" format="color"/>
+        <attr name="value_text_size" format="dimension"/>
+        <attr name="value_text_visible" format="enum">
+            <enum name="visible" value="0"/>
+            <enum name="gone" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
