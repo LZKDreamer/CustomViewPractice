@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:padding="10dp"
-        app:bar_height="5dp"
+        android:padding="20dp"
+        app:bar_height="13dp"
         />
     <com.lzk.customhorizontalbar.TagHorizontalBar
         android:id="@+id/main_tag_hb"
@@ -23,4 +23,11 @@
         android:padding="5dp"
         android:layout_marginTop="10dp"
         />
+    <Button
+        android:id="@+id/main_random_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="随机调整进度"
+        android:layout_margin="20dp"
+        android:layout_gravity="center_horizontal"/>
 </LinearLayout>
