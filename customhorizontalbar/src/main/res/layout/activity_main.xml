@@ -23,6 +23,17 @@
         android:padding="5dp"
         android:layout_marginTop="10dp"
         />
+    <com.lzk.customhorizontalbar.ElectricityView
+        android:id="@+id/main_elect_view"
+        android:layout_width="match_parent"
+        android:layout_height="80px"
+        android:background="@color/colorAccent"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:progress="1"
+        app:background_color="#DEDEDE"
+        app:value_color="#02CA02"
+        />
     <Button
         android:id="@+id/main_random_btn"
         android:layout_width="wrap_content"

@@ -29,4 +29,11 @@
         <attr name="tag_text" format="string"/>
         <attr name="tag_percent_text_size" format="dimension"/>
     </declare-styleable>
+    
+    <declare-styleable name="ElectricityView">
+        <attr name="background_color" format="color"/>
+        <attr name="value_color" format="color"/>
+        <attr name="progress" format="integer"/>
+        <attr name="corner" format="dimension"/>
+    </declare-styleable>
 </resources>
