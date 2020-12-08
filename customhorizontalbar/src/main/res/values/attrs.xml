@@ -33,7 +33,11 @@
     <declare-styleable name="ElectricityView">
         <attr name="background_color" format="color"/>
         <attr name="value_color" format="color"/>
+        <attr name="value_warning_color" format="color"/>
         <attr name="progress" format="integer"/>
         <attr name="corner" format="dimension"/>
+        <attr name="normal_text_color" format="color"/>
+        <attr name="warning_text_color" format="color"/>
+        <attr name="text_size_px" format="dimension"/>
     </declare-styleable>
 </resources>

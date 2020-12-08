@@ -24,6 +24,10 @@ public class ElectricityView extends View {
     private static final float DEFAULT_CORNER = 16f;//px
     private static final int DEFAULT_HEIGHT = 40;//px
     private static final int MAX_PROGRESS = 100;
+    private static final int DEFAULT_VALUE_WARNING_COLOR = Color.RED;
+    private static final int DEFAULT_NORMAL_TEXT_COLOR = Color.WHITE;
+    private static final int DEFAULT_WARNING_TEXT_COLOR = Color.LTGRAY;
+    private static final float DEFAULT_TEXT_SIZE = 24f;//px
     //endregion
 
     //region 属性值
@@ -35,9 +39,22 @@ public class ElectricityView extends View {
     private float mCorner = DEFAULT_CORNER;
     //进度
     private int mProgress = 0;
+    //电量警告色
+    private int mValueWarningColor = DEFAULT_VALUE_WARNING_COLOR;
+    //默认电量颜色
+    private int mNormalValueColor = DEFAULT_VALUE_COLOR;
+    //文字正常颜色
+    private int mNormalTextColor = DEFAULT_NORMAL_TEXT_COLOR;
+    //文字警告颜色
+    private int mWaningTextColor = DEFAULT_WARNING_TEXT_COLOR;
+    //字体大小
+    private float mTextSize = DEFAULT_TEXT_SIZE;
     //endregion
 
-    private Paint mPaint;
+    //region Paint
+    private Paint mBarPaint;
+    private Paint mTextPaint;
+    //endregion
 
     //去掉Padding后的宽度
     private int mRealWidth;
@@ -60,14 +77,23 @@ public class ElectricityView extends View {
                 attrs, R.styleable.ElectricityView);
         mBackgroundColor = typedArray.getColor(R.styleable.ElectricityView_background_color, DEFAULT_BACKGROUND_COLOR);
         mValueColor = typedArray.getColor(R.styleable.ElectricityView_value_color,DEFAULT_VALUE_COLOR);
+        mNormalValueColor = mValueColor;
         mCorner = typedArray.getDimension(R.styleable.ElectricityView_corner,DEFAULT_CORNER);
         mProgress = typedArray.getInteger(R.styleable.ElectricityView_progress,0);
+        mValueWarningColor = typedArray.getColor(R.styleable.ElectricityView_value_warning_color,DEFAULT_VALUE_WARNING_COLOR);
+        mNormalTextColor = typedArray.getColor(R.styleable.ElectricityView_normal_text_color,DEFAULT_NORMAL_TEXT_COLOR);
+        mWaningTextColor = typedArray.getColor(R.styleable.ElectricityView_warning_text_color,DEFAULT_WARNING_TEXT_COLOR);
+        mTextSize = typedArray.getDimension(R.styleable.ElectricityView_text_size_px,DEFAULT_TEXT_SIZE);
         typedArray.recycle();
     }
 
     private void initPaint(){
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setStyle(Paint.Style.FILL);
+        mBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mBarPaint.setStyle(Paint.Style.FILL);
+
+        mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint.setTextSize(mTextSize);
+        mTextPaint.setColor(mNormalTextColor);
     }
 
     @Override
@@ -89,7 +115,9 @@ public class ElectricityView extends View {
         }else {
             result = getMeasuredHeight()+getPaddingBottom()+getPaddingTop();
             if (specMode == MeasureSpec.AT_MOST){
-                result = Math.min(result,Math.min(specSize,DEFAULT_HEIGHT));
+                int height = Math.min(result,Math.min(specSize,DEFAULT_HEIGHT));
+                int textHeight = (int) (mTextPaint.descent() - mTextPaint.ascent());
+                result = Math.max(height,textHeight);
             }
         }
         return result;
@@ -102,25 +130,49 @@ public class ElectricityView extends View {
         canvas.translate(getPaddingStart(),getPaddingTop());
         drawBottomBar(canvas);
         drawValueBar(canvas);
+        drawText(canvas);
         canvas.restore();
     }
 
     //画底部进度条
     private void drawBottomBar(Canvas canvas){
-        mPaint.setColor(mBackgroundColor);
+        mBarPaint.setColor(mBackgroundColor);
         RectF rectF = new RectF(0,0,mRealWidth,mRealHeight);
-        canvas.drawRoundRect(rectF,mCorner,mCorner,mPaint);
+        canvas.drawRoundRect(rectF,mCorner,mCorner, mBarPaint);
     }
 
     //画进度条
     private void drawValueBar(Canvas canvas){
-        mPaint.setColor(mValueColor);
+        if (mProgress > 20){
+            mValueColor = mNormalValueColor;
+        }else {
+            mValueColor = mValueWarningColor;
+        }
+        mBarPaint.setColor(mValueColor);
         float width = getProgressBarWidth();
         if (width > 0 && width<mCorner){//如果进度条宽度比圆角的宽度还小，就默认宽度为圆角的宽度，不然很难看
             width = mCorner;
         }
         RectF rectF = new RectF(0,0,width,mRealHeight);
-        canvas.drawRoundRect(rectF,mCorner,mCorner,mPaint);
+        canvas.drawRoundRect(rectF,mCorner,mCorner, mBarPaint);
+    }
+
+    //画文字
+    private void drawText(Canvas canvas){
+        String text = mProgress+"%";
+        float textHeight = mTextPaint.descent() - mTextPaint.ascent();
+        float textWidth = mTextPaint.measureText(text);
+        float textBaseLineY = textHeight/2f - mTextPaint.descent();
+        float textY = mRealHeight/2f + textBaseLineY;
+        float textX = 0f;
+        if (mProgress > 20){
+            textX = getProgressBarWidth()/2f - textWidth/2f;
+            mTextPaint.setColor(mNormalTextColor);
+        }else {
+            textX = mRealWidth/2f - textWidth/2f;
+            mTextPaint.setColor(mWaningTextColor);
+        }
+        canvas.drawText(text,textX,textY,mTextPaint);
     }
 
     private float getProgressBarWidth(){

@@ -33,6 +33,9 @@
         app:progress="1"
         app:background_color="#DEDEDE"
         app:value_color="#02CA02"
+        app:value_warning_color="#FF3434"
+        app:text_size_px="24px"
+        app:warning_text_color="#737373"
         />
     <Button
         android:id="@+id/main_random_btn"
@@ -40,5 +43,6 @@
         android:layout_height="wrap_content"
         android:text="随机调整进度"
         android:layout_margin="20dp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        />
 </LinearLayout>
